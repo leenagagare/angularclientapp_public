@@ -1,0 +1,83 @@
+<div *ngIf="viewMode; else editable">
+  <div *ngIf="currentProduct.productCode">
+    <h4>Product</h4>
+    <div>
+      <label><strong>Name:</strong></label> {{ currentProduct.name }}
+    </div>
+    <div>
+      <label><strong>Description:</strong></label>
+      {{ currentProduct.productDescription }}
+    </div>
+    <div>
+      <label><strong>Price:</strong></label>
+      {{ currentProduct.price }}
+    </div>
+    <a
+      class="badge badge-warning"
+      [routerLink]="['/products', currentProduct.productCode]"
+      >Edit</a
+    >
+  </div>
+
+  <div *ngIf="!currentProduct">
+    <br />
+    <p>Please click on a Product...</p>
+  </div>
+</div>
+
+<ng-template #editable>
+  <div *ngIf="currentProduct.productCode" class="edit-form">
+    <h4>Update Product</h4>
+    <form>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input
+          type="text"
+          class="form-control"
+          productCode="name"
+          [(ngModel)]="currentProduct.name"
+          name="name"
+        />
+      </div>
+      <div class="form-group">
+        <label for="productDescription">Description</label>
+        <input
+          type="text"
+          class="form-control"
+          productCode="productDescription"
+          [(ngModel)]="currentProduct.productDescription"
+          name="productDescription"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="productDescription">Price:</label>
+        <input
+          type="text"
+          class="form-control"
+          productCode="price"
+          [(ngModel)]="currentProduct.price"
+          name="price"
+        />
+      </div>
+    </form>
+
+    <button class="badge badge-danger mr-2" (click)="deleteProduct()">
+      Delete
+    </button>
+
+    <button
+      type="submit"
+      class="badge badge-success mb-2"
+      (click)="updateProduct()"
+    >
+      Update
+    </button>
+    <p>{{ message }}</p>
+  </div>
+
+  <div *ngIf="!currentProduct.productCode">
+    <br />
+    <p>Cannot access this Product...</p>
+  </div>
+</ng-template>

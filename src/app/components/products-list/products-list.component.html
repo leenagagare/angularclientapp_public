@@ -1,0 +1,75 @@
+<div class="list row" *ngIf="Products.length > 0">
+  <div class="col-md-8">
+    <div class="input-group mb-3">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search by name"
+        [(ngModel)]="title"
+      />
+      <div class="input-group-append">
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          (click)="searchTitle()"
+        >
+          Search
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <pagination-controls
+      previousLabel="Prev"
+      nextLabel="Next"
+      [responsive]="true"
+      (pageChange)="handlePageChange($event)"
+    ></pagination-controls>
+  </div>
+  <div class="col-md-6">
+    <h4>Products List</h4>
+    <ul class="list-group">
+      <li
+        class="list-group-item"
+        *ngFor="
+          let product of Products
+            | paginate
+              : {
+                  itemsPerPage: pageSize,
+                  currentPage: page,
+                  totalItems: count
+                };
+          let i = index
+        "
+        [class.active]="i == currentIndex"
+        (click)="setActiveProduct(product, i)"
+      >
+        Product Name: {{ product.name }}
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-6">
+    <app-product-details
+      [viewMode]="true"
+      [currentProduct]="currentProduct"
+    ></app-product-details>
+  </div>
+  {{ message }}
+  <div class="mt-3">
+    <button class="m-3 btn btn-sm btn-danger" (click)="removeAllProducts()">
+      Remove All
+    </button>
+
+    Items per Page:
+    <select (change)="handlePageSizeChange($event)">
+      <option *ngFor="let size of pageSizes" [ngValue]="size">
+        {{ size }}
+      </option>
+    </select>
+  </div>
+</div>
+<div class="list row" *ngIf="Products.length == 0">
+  <h4>add new products!</h4>
+  <button class="btn btn-success" [routerLink]="['/add']">Add</button>
+</div>
